@@ -1,0 +1,90 @@
+optimizer : {
+  name: AdamW,
+  kwargs: {
+  G_lr : 0.0001,
+  D_lr : 0.0001,
+  R_lr : 0.0001,
+  G_weight_decay: 0.,
+  D_weight_decay: 0.,
+  R_weight_decay: 0.,
+  },
+}
+
+scheduler: {
+  type: LambdaLR,
+  kwargs: {
+  decay_step: 21,
+  lr_decay: 0.76,
+  lowest_decay: 0.02,
+  t_max: 100,
+  min_lr: 0.0001,
+  initial_epochs: 5,
+  }
+}
+
+dataset : {
+  NAME: DA,
+  data_path: /mnt/ssd1/ppcc_dataset,
+  num_pts: 2048
+}
+
+metric : {
+  name: ['F-Score', 'UCDL1', 'UCDL2', 'coarseCDL1', 'denseCDL1', 'EMD'],
+}
+
+model: {
+  NAME: PPCC,
+  
+  use_disc: True,
+  use_ref: True,
+  
+  PBD: {
+    num_fps: 128,
+    conf_thres: 0.03,
+    },
+  PAC: {
+    enc: {
+      num_feats: 384,
+      },
+    trm: {
+      type: part,
+      depth: [6],
+      num_head: 6,                   
+      num_query: 512,
+      mask_layer: 1,
+      trans_dim: 384,
+      },
+    dec: {
+      upn: 4,
+      },
+    ref: {
+      upn: 4,
+    },
+  },
+  discriminator: {
+    num_feats: 384,
+  },
+  loss: {
+    name: [
+      'loss_g', 'loss_d', 'loss_r',
+      'g_fake_loss', 'd_fake_loss', 'd_real_loss',
+      'src_coarse_cd1', 'src_dense_cd1', 'src_coarse2_cd1', 'src_dense2_cd1', 'tgt_dense_ucd1'],
+
+    weight: [
+      1., 1000., 1.,
+      1., 1., 1.,
+      10000., 10000., 10000., 10000., 1000.
+      ],
+    },
+  }
+
+seg_dict: {
+  'chair': 4, 'table': 2, 'lamp': 3, 'bed': 3
+}
+
+total_bs : 32
+step_per_update : 1
+max_epoch: 500
+refine_start_epoch: 50
+
+consider_metric: CDL1
