@@ -1,6 +1,7 @@
 # PPCC: Syn-to-Real Domain Adaptation for Point Cloud Completion via Part-based Approach (ECCV 2024)
-Official repository for ECCV 2024 paper:
-**"Syn-to-Real Domain Adaptation for Point Cloud Completion via Part-based Approach"**
+Official code repository for the ECCV 2024 paper:  
+**"Syn-to-Real Domain Adaptation for Point Cloud Completion via Part-based Approach"**  
+by Yunseo Yang, Jihun Kim, and Kuk-Jin Yoon.
 
 
 ## Setup
